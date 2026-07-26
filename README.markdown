@@ -12,7 +12,7 @@ Vim 8 is no longer supported: the plugin ships a treesitter query, not a regex s
 With [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
-{ "sunaku/vim-ruby-minitest", ft = "ruby" }
+{ "tarebyte/vim-ruby-minitest", ft = "ruby" }
 ```
 
 Otherwise, copy the `after/` directory into a Neovim runtime directory.

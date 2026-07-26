@@ -41,10 +41,8 @@ The same applies to overriding either group to taste: >
 ==============================================================================
 FOLDING ~
 
-                                                          *ruby_minitest_fold*
-The `g:ruby_minitest_fold` option no longer exists.  The stock Ruby treesitter
-`folds.scm` already folds `(do_block)`, which covers `describe` and `it`, so
-enabling treesitter folding is all that is needed: >
+The stock Ruby treesitter `folds.scm` already folds `(do_block)`, which covers
+`describe` and `it`, so enabling treesitter folding is all that is needed: >
 
     :set foldmethod=expr
     :set foldexpr=v:lua.vim.treesitter.foldexpr()
