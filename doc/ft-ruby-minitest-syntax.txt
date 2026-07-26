@@ -1,26 +1,53 @@
 RUBY MINITEST             *ruby-minitest-syntax.vim*  *ft-rubyminitest-syntax*
 
 ==============================================================================
-OPTIONS ~
+REQUIREMENTS ~
+
+  - Neovim 0.9 or later.
+  - The `ruby` |treesitter| parser, e.g. via `:TSInstall ruby`.
+  - Treesitter highlighting active for Ruby buffers, e.g. by calling
+    `vim.treesitter.start()` from a FileType autocommand, or by using a
+    distribution that does so for you.
+
+This plug-in ships a single query file, `after/queries/ruby/highlights.scm`,
+which `; extends` the stock Ruby highlights query.  Nothing is highlighted if
+treesitter highlighting is off; there is no regex-syntax fallback.
+
+==============================================================================
+HIGHLIGHT GROUPS ~
+
+Two capture groups are used:
+
+  `@function.builtin`   Assertions and expectations: `assert_equal`, `refute_nil`,
+                      `must_equal`, `wont_include`, `skip`, `flunk`, `pass`, and
+                      the `_()` / `value()` / `expect()` wrappers.
+
+  `@function.macro`     Spec DSL blocks: `describe`, `it`, `specify`, `before`,
+                      `after`, `setup`, `teardown`, `context`, `let`, `subject`,
+                      `feature`, `scenario`, `background`.
+
+The DSL group only matches when the call takes a block, so ordinary Ruby code
+that happens to call a method named `context` or `feature` is left alone.
+
+Note: Neovim core does not link `@function.macro` to anything by default.  Most
+colorschemes define it; if yours does not, set it yourself: >
+
+    vim.api.nvim_set_hl(0, "@function.macro", { link = "Statement" })
+<
+The same applies to overriding either group to taste: >
+
+    vim.api.nvim_set_hl(0, "@function.builtin.ruby", { link = "Function" })
+<
+==============================================================================
+FOLDING ~
 
                                                           *ruby_minitest_fold*
-ruby_minitest_fold  (default: none) ~
+The `g:ruby_minitest_fold` option no longer exists.  The stock Ruby treesitter
+`folds.scm` already folds `(do_block)`, which covers `describe` and `it`, so
+enabling treesitter folding is all that is needed: >
 
-  Set to 1 to enable |folding| on main section blocks (`describe` and `it`
-  blocks).
-
-  Note: to reduce complexity, only `end` with same indentation level as
-        its beginning is detected. >
-
-    let g:ruby_minitest_fold = 1
+    :set foldmethod=expr
+    :set foldexpr=v:lua.vim.treesitter.foldexpr()
 <
-  - Must set before loading this syntax file. e.g., in .vimrc.
-  - Remember also set 'foldmethod' to "syntax".
-  - Support global (|g:|) or buffer-local (|b:|) setting.
-
-  Note: Enabling ruby_mintest_fold if using another Ruby plug-in that provides
-  folding, especially vim-ruby, is discouraged; block folding regions are
-  defined in these plug-ins in incompatible ways.
-
 ==============================================================================
 vim:tw=78:fo=tcroq2mM:et:sts=2:sw=2:ft=help:norl:
